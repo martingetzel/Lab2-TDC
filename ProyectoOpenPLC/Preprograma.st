@@ -32,32 +32,49 @@ PROGRAM program0
     TransfRight AT %QX101.6 : BOOL := FALSE;
   END_VAR
   VAR
+    PopulatedPallet : RS;
     TOF0 : TOF;
     TOF1 : TOF;
     NOT27_OUT : BOOL;
-    NOT29_OUT : BOOL;
-    NOT38_OUT : BOOL;
-    AND37_OUT : BOOL;
-    AND40_OUT : BOOL;
-    AND4_OUT : BOOL;
-    NOT42_OUT : BOOL;
+    AND75_OUT : BOOL;
+    AND74_OUT : BOOL;
+    NOT2_OUT : BOOL;
+    AND46_OUT : BOOL;
+    NOT57_OUT : BOOL;
+    AND55_OUT : BOOL;
+    OR56_OUT : BOOL;
+    AND6_OUT : BOOL;
     AND5_OUT : BOOL;
+    NOT3_OUT : BOOL;
+    OR4_OUT : BOOL;
+    NOT68_OUT : BOOL;
   END_VAR
 
   NOT27_OUT := NOT(FirstTransferLoaded);
-  LoadFirstTransfer := NOT27_OUT;
-  NOT29_OUT := NOT(FirstTransferLoaded);
-  FirstConveyor := NOT29_OUT;
-  NOT38_OUT := NOT(PopulatedPalletSensor);
-  AND37_OUT := AND(EmptyPalletSensor, NOT38_OUT);
-  TOF0(IN := AND37_OUT, PT := T#2500ms);
-  AND40_OUT := AND(TOF0.Q, FirstTransferLoaded);
-  TOF1(IN := PopulatedPalletSensor, PT := T#2500ms);
-  AND4_OUT := AND(FirstTransferLoaded, TOF1.Q);
-  NOT42_OUT := NOT(AND4_OUT);
-  AND5_OUT := AND(AND40_OUT, NOT42_OUT);
-  TransEmptyPallet := AND5_OUT;
-  TransPopulatedPallet := AND4_OUT;
+  AND75_OUT := AND(AtEmptyPallet, AtPopulatedPallet);
+  AND74_OUT := AND(NOT27_OUT, AND75_OUT);
+  FirstConveyor := AND74_OUT;
+  LoadFirstTransfer := AND74_OUT;
+  NOT2_OUT := NOT(AtEmptyPallet);
+  TOF0(IN := NOT2_OUT, PT := T#2500ms);
+  RemoverEmptyPallet := TOF0.Q;
+  AND46_OUT := AND(EmptyPalletSensor, PopulatedPalletSensor);
+  PopulatedPallet(S := AND46_OUT, R1 := SecondTransferLoaded);
+  NOT57_OUT := NOT(PopulatedPallet.Q1);
+  AND55_OUT := AND(NOT57_OUT, FirstTransferLoaded);
+  OR56_OUT := OR(NOT2_OUT, AND55_OUT);
+  TransEmptyPallet := OR56_OUT;
+  AND6_OUT := AND(PopulatedPallet.Q1, SecondTransferLoaded);
+  LoadSecondTransfer := AND6_OUT;
+  AND5_OUT := AND(PopulatedPallet.Q1, FirstTransferLoaded);
+  NOT3_OUT := NOT(AtPopulatedPallet);
+  OR4_OUT := OR(AND5_OUT, NOT3_OUT);
+  TransPopulatedPallet := OR4_OUT;
+  TOF1(IN := SecondTransferLoaded, PT := T#2500ms);
+  TransToSecondConveyor := TOF1.Q;
+  NOT68_OUT := NOT(ThirdTransferLoaded);
+  SecondConveyor := NOT68_OUT;
+  LoadThirdTransfer := NOT68_OUT;
 END_PROGRAM
 
 

@@ -231,17 +231,22 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   __INIT_VAR(data__->TRANSTOSECONDCONVEYOR,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->TRANSFLEFT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->TRANSFRIGHT,__BOOL_LITERAL(FALSE),retain)
+  RS_init__(&data__->POPULATEDPALLET,retain);
   TOF_init__(&data__->TOF0,retain);
   TOF_init__(&data__->TOF1,retain);
-  TON_init__(&data__->TON0,retain);
   __INIT_VAR(data__->NOT27_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT29_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT38_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND37_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND40_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND4_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT42_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND75_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND74_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT2_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND46_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT57_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND55_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->OR56_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND6_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND5_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT3_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->OR4_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT68_OUT,__BOOL_LITERAL(FALSE),retain)
 }
 
 // Code part
@@ -249,46 +254,76 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
   // Initialise TEMP variables
 
   __SET_VAR(data__->,NOT27_OUT,,!(__GET_VAR(data__->FIRSTTRANSFERLOADED,)));
-  __SET_VAR(data__->,LOADFIRSTTRANSFER,,__GET_VAR(data__->NOT27_OUT,));
-  __SET_VAR(data__->,NOT29_OUT,,!(__GET_VAR(data__->FIRSTTRANSFERLOADED,)));
-  __SET_VAR(data__->,FIRSTCONVEYOR,,__GET_VAR(data__->NOT29_OUT,));
-  __SET_VAR(data__->TON0.,IN,,__GET_VAR(data__->EMPTYPALLETSENSOR,));
-  __SET_VAR(data__->TON0.,PT,,__time_to_timespec(1, 500, 0, 0, 0, 0));
-  TON_body__(&data__->TON0);
-  __SET_VAR(data__->,NOT38_OUT,,!(__GET_VAR(data__->POPULATEDPALLETSENSOR,)));
-  __SET_VAR(data__->,AND37_OUT,,AND__BOOL__BOOL(
+  __SET_VAR(data__->,AND75_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
     (UINT)2,
-    (BOOL)__GET_VAR(data__->TON0.Q,),
-    (BOOL)__GET_VAR(data__->NOT38_OUT,)));
-  __SET_VAR(data__->TOF0.,IN,,__GET_VAR(data__->AND37_OUT,));
+    (BOOL)__GET_VAR(data__->ATEMPTYPALLET,),
+    (BOOL)__GET_VAR(data__->ATPOPULATEDPALLET,)));
+  __SET_VAR(data__->,AND74_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->NOT27_OUT,),
+    (BOOL)__GET_VAR(data__->AND75_OUT,)));
+  __SET_VAR(data__->,FIRSTCONVEYOR,,__GET_VAR(data__->AND74_OUT,));
+  __SET_VAR(data__->,LOADFIRSTTRANSFER,,__GET_VAR(data__->AND74_OUT,));
+  __SET_VAR(data__->,NOT2_OUT,,!(__GET_VAR(data__->ATEMPTYPALLET,)));
+  __SET_VAR(data__->TOF0.,IN,,__GET_VAR(data__->NOT2_OUT,));
   __SET_VAR(data__->TOF0.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
   TOF_body__(&data__->TOF0);
-  __SET_VAR(data__->,AND40_OUT,,AND__BOOL__BOOL(
+  __SET_VAR(data__->,REMOVEREMPTYPALLET,,__GET_VAR(data__->TOF0.Q,));
+  __SET_VAR(data__->,AND46_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
     (UINT)2,
-    (BOOL)__GET_VAR(data__->TOF0.Q,),
+    (BOOL)__GET_VAR(data__->EMPTYPALLETSENSOR,),
+    (BOOL)__GET_VAR(data__->POPULATEDPALLETSENSOR,)));
+  __SET_VAR(data__->POPULATEDPALLET.,S,,__GET_VAR(data__->AND46_OUT,));
+  __SET_VAR(data__->POPULATEDPALLET.,R1,,__GET_VAR(data__->SECONDTRANSFERLOADED,));
+  RS_body__(&data__->POPULATEDPALLET);
+  __SET_VAR(data__->,NOT57_OUT,,!(__GET_VAR(data__->POPULATEDPALLET.Q1,)));
+  __SET_VAR(data__->,AND55_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->NOT57_OUT,),
     (BOOL)__GET_VAR(data__->FIRSTTRANSFERLOADED,)));
-  __SET_VAR(data__->TOF1.,IN,,__GET_VAR(data__->POPULATEDPALLETSENSOR,));
-  __SET_VAR(data__->TOF1.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF1);
-  __SET_VAR(data__->,AND4_OUT,,AND__BOOL__BOOL(
+  __SET_VAR(data__->,OR56_OUT,,OR__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
     (UINT)2,
-    (BOOL)__GET_VAR(data__->FIRSTTRANSFERLOADED,),
-    (BOOL)__GET_VAR(data__->TOF1.Q,)));
-  __SET_VAR(data__->,NOT42_OUT,,!(__GET_VAR(data__->AND4_OUT,)));
+    (BOOL)__GET_VAR(data__->NOT2_OUT,),
+    (BOOL)__GET_VAR(data__->AND55_OUT,)));
+  __SET_VAR(data__->,TRANSEMPTYPALLET,,__GET_VAR(data__->OR56_OUT,));
+  __SET_VAR(data__->,AND6_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->POPULATEDPALLET.Q1,),
+    (BOOL)__GET_VAR(data__->SECONDTRANSFERLOADED,)));
+  __SET_VAR(data__->,LOADSECONDTRANSFER,,__GET_VAR(data__->AND6_OUT,));
   __SET_VAR(data__->,AND5_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
     (UINT)2,
-    (BOOL)__GET_VAR(data__->AND40_OUT,),
-    (BOOL)__GET_VAR(data__->NOT42_OUT,)));
-  __SET_VAR(data__->,TRANSEMPTYPALLET,,__GET_VAR(data__->AND5_OUT,));
-  __SET_VAR(data__->,TRANSPOPULATEDPALLET,,__GET_VAR(data__->AND4_OUT,));
+    (BOOL)__GET_VAR(data__->POPULATEDPALLET.Q1,),
+    (BOOL)__GET_VAR(data__->FIRSTTRANSFERLOADED,)));
+  __SET_VAR(data__->,NOT3_OUT,,!(__GET_VAR(data__->ATPOPULATEDPALLET,)));
+  __SET_VAR(data__->,OR4_OUT,,OR__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->AND5_OUT,),
+    (BOOL)__GET_VAR(data__->NOT3_OUT,)));
+  __SET_VAR(data__->,TRANSPOPULATEDPALLET,,__GET_VAR(data__->OR4_OUT,));
+  __SET_VAR(data__->TOF1.,IN,,__GET_VAR(data__->SECONDTRANSFERLOADED,));
+  __SET_VAR(data__->TOF1.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF1);
+  __SET_VAR(data__->,TRANSTOSECONDCONVEYOR,,__GET_VAR(data__->TOF1.Q,));
+  __SET_VAR(data__->,NOT68_OUT,,!(__GET_VAR(data__->THIRDTRANSFERLOADED,)));
+  __SET_VAR(data__->,SECONDCONVEYOR,,__GET_VAR(data__->NOT68_OUT,));
+  __SET_VAR(data__->,LOADTHIRDTRANSFER,,__GET_VAR(data__->NOT68_OUT,));
 
   goto __end;
 
