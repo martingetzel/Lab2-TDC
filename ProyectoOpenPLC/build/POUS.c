@@ -234,6 +234,11 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   RS_init__(&data__->POPULATEDPALLET,retain);
   TOF_init__(&data__->TOF0,retain);
   TOF_init__(&data__->TOF1,retain);
+  RS_init__(&data__->HIGH,retain);
+  TOF_init__(&data__->TOF2,retain);
+  TOF_init__(&data__->TOF3,retain);
+  RS_init__(&data__->RS0,retain);
+  TOF_init__(&data__->TOF4,retain);
   __INIT_VAR(data__->NOT27_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND75_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND74_OUT,__BOOL_LITERAL(FALSE),retain)
@@ -247,6 +252,12 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   __INIT_VAR(data__->NOT3_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->OR4_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT68_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT13_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND8_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT9_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND82_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->OR83_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT14_OUT,__BOOL_LITERAL(FALSE),retain)
 }
 
 // Code part
@@ -321,9 +332,49 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
   __SET_VAR(data__->TOF1.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
   TOF_body__(&data__->TOF1);
   __SET_VAR(data__->,TRANSTOSECONDCONVEYOR,,__GET_VAR(data__->TOF1.Q,));
+  __SET_VAR(data__->TOF4.,IN,,__GET_VAR(data__->PALLETSENSOR,));
+  __SET_VAR(data__->TOF4.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF4);
+  __SET_VAR(data__->RS0.,S,,__GET_VAR(data__->SECONDTRANSFERLOADED,));
+  __SET_VAR(data__->RS0.,R1,,__GET_VAR(data__->TOF4.Q,));
+  RS_body__(&data__->RS0);
+  __SET_VAR(data__->,SECONDCONVEYOR,,__GET_VAR(data__->RS0.Q1,));
   __SET_VAR(data__->,NOT68_OUT,,!(__GET_VAR(data__->THIRDTRANSFERLOADED,)));
-  __SET_VAR(data__->,SECONDCONVEYOR,,__GET_VAR(data__->NOT68_OUT,));
   __SET_VAR(data__->,LOADTHIRDTRANSFER,,__GET_VAR(data__->NOT68_OUT,));
+  __SET_VAR(data__->,NOT13_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
+  __SET_VAR(data__->,AND8_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->HIGHSENSOR,),
+    (BOOL)__GET_VAR(data__->LOWSENSOR,)));
+  __SET_VAR(data__->,NOT9_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
+  __SET_VAR(data__->TOF3.,IN,,__GET_VAR(data__->NOT9_OUT,));
+  __SET_VAR(data__->TOF3.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF3);
+  __SET_VAR(data__->HIGH.,S,,__GET_VAR(data__->AND8_OUT,));
+  __SET_VAR(data__->HIGH.,R1,,__GET_VAR(data__->TOF3.Q,));
+  RS_body__(&data__->HIGH);
+  __SET_VAR(data__->,AND82_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->HIGH.Q1,),
+    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,)));
+  __SET_VAR(data__->,OR83_OUT,,OR__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->NOT13_OUT,),
+    (BOOL)__GET_VAR(data__->AND82_OUT,)));
+  __SET_VAR(data__->,TRANSFLEFT,,__GET_VAR(data__->OR83_OUT,));
+  __SET_VAR(data__->,CONVEYORLEFT,,1);
+  __SET_VAR(data__->,CONVEYORRIGHT,,1);
+  __SET_VAR(data__->,NOT14_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
+  __SET_VAR(data__->TOF2.,IN,,__GET_VAR(data__->NOT14_OUT,));
+  __SET_VAR(data__->TOF2.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF2);
+  __SET_VAR(data__->,REMOVERLARGEPACKAGE,,__GET_VAR(data__->TOF2.Q,));
 
   goto __end;
 

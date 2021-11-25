@@ -129,6 +129,11 @@ PROGRAM program0
     PopulatedPallet : RS;
     TOF0 : TOF;
     TOF1 : TOF;
+    High : RS;
+    TOF2 : TOF;
+    TOF3 : TOF;
+    RS0 : RS;
+    TOF4 : TOF;
     NOT27_OUT : BOOL;
     AND75_OUT : BOOL;
     AND74_OUT : BOOL;
@@ -142,6 +147,12 @@ PROGRAM program0
     NOT3_OUT : BOOL;
     OR4_OUT : BOOL;
     NOT68_OUT : BOOL;
+    NOT13_OUT : BOOL;
+    AND8_OUT : BOOL;
+    NOT9_OUT : BOOL;
+    AND82_OUT : BOOL;
+    OR83_OUT : BOOL;
+    NOT14_OUT : BOOL;
   END_VAR
 
   NOT27_OUT := NOT(FirstTransferLoaded);
@@ -166,9 +177,24 @@ PROGRAM program0
   TransPopulatedPallet := OR4_OUT;
   TOF1(IN := SecondTransferLoaded, PT := T#2500ms);
   TransToSecondConveyor := TOF1.Q;
+  TOF4(IN := PalletSensor, PT := T#2500ms);
+  RS0(S := SecondTransferLoaded, R1 := TOF4.Q);
+  SecondConveyor := RS0.Q1;
   NOT68_OUT := NOT(ThirdTransferLoaded);
-  SecondConveyor := NOT68_OUT;
   LoadThirdTransfer := NOT68_OUT;
+  NOT13_OUT := NOT(AtLeftEntry);
+  AND8_OUT := AND(HighSensor, LowSensor);
+  NOT9_OUT := NOT(AtLeftEntry);
+  TOF3(IN := NOT9_OUT, PT := T#1000ms);
+  High(S := AND8_OUT, R1 := TOF3.Q);
+  AND82_OUT := AND(High.Q1, ThirdTransferLoaded);
+  OR83_OUT := OR(NOT13_OUT, AND82_OUT);
+  TransfLeft := OR83_OUT;
+  ConveyorLeft := 1;
+  ConveyorRight := 1;
+  NOT14_OUT := NOT(AtLeftExit);
+  TOF2(IN := NOT14_OUT, PT := T#2500ms);
+  RemoverLargePackage := TOF2.Q;
 END_PROGRAM
 
 
