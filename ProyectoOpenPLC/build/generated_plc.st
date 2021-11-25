@@ -39,7 +39,6 @@ PROGRAM program0
     TOF2 : TOF;
     TOF3 : TOF;
     RS0 : RS;
-    TOF4 : TOF;
     NOT27_OUT : BOOL;
     AND75_OUT : BOOL;
     AND74_OUT : BOOL;
@@ -52,6 +51,8 @@ PROGRAM program0
     AND5_OUT : BOOL;
     NOT3_OUT : BOOL;
     OR4_OUT : BOOL;
+    NOT25_OUT : BOOL;
+    AND22_OUT : BOOL;
     NOT68_OUT : BOOL;
     NOT13_OUT : BOOL;
     AND8_OUT : BOOL;
@@ -83,8 +84,9 @@ PROGRAM program0
   TransPopulatedPallet := OR4_OUT;
   TOF1(IN := SecondTransferLoaded, PT := T#2500ms);
   TransToSecondConveyor := TOF1.Q;
-  TOF4(IN := PalletSensor, PT := T#2500ms);
-  RS0(S := SecondTransferLoaded, R1 := TOF4.Q);
+  NOT25_OUT := NOT(TOF1.Q);
+  AND22_OUT := AND(NOT25_OUT, ThirdTransferLoaded);
+  RS0(S := SecondTransferLoaded, R1 := AND22_OUT);
   SecondConveyor := RS0.Q1;
   NOT68_OUT := NOT(ThirdTransferLoaded);
   LoadThirdTransfer := NOT68_OUT;
