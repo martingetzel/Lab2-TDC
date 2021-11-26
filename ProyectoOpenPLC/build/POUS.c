@@ -202,8 +202,8 @@ __end:
 
 void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   __INIT_VAR(data__->ATEMPTYPALLET,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->ATLEFTENTRY,__BOOL_LITERAL(TRUE),retain)
-  __INIT_VAR(data__->ATLEFTEXIT,__BOOL_LITERAL(TRUE),retain)
+  __INIT_VAR(data__->ATLEFTENTRY,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->ATLEFTEXIT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->ATPOPULATEDPALLET,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->ATRIGHTENTRY,__BOOL_LITERAL(TRUE),retain)
   __INIT_VAR(data__->ATRIGHTEXIT,__BOOL_LITERAL(TRUE),retain)
@@ -238,6 +238,14 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   TOF_init__(&data__->TOF2,retain);
   TOF_init__(&data__->TOF3,retain);
   RS_init__(&data__->RS0,retain);
+  RS_init__(&data__->LEFTC,retain);
+  TON_init__(&data__->TON0,retain);
+  RS_init__(&data__->LEFTC0,retain);
+  TON_init__(&data__->TON1,retain);
+  TOF_init__(&data__->TOF4,retain);
+  RS_init__(&data__->HIGH0,retain);
+  TOF_init__(&data__->TOF5,retain);
+  TOF_init__(&data__->TOF6,retain);
   __INIT_VAR(data__->NOT27_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND75_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND74_OUT,__BOOL_LITERAL(FALSE),retain)
@@ -253,11 +261,17 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   __INIT_VAR(data__->NOT25_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND22_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT68_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT13_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND8_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT9_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND82_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->OR83_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT45_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND48_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT37_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND54_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT31_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT32_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT34_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT35_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT14_OUT,__BOOL_LITERAL(FALSE),retain)
 }
 
@@ -346,13 +360,11 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
   __SET_VAR(data__->,SECONDCONVEYOR,,__GET_VAR(data__->RS0.Q1,));
   __SET_VAR(data__->,NOT68_OUT,,!(__GET_VAR(data__->THIRDTRANSFERLOADED,)));
   __SET_VAR(data__->,LOADTHIRDTRANSFER,,__GET_VAR(data__->NOT68_OUT,));
-  __SET_VAR(data__->,NOT13_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
   __SET_VAR(data__->,AND8_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
-    (UINT)2,
-    (BOOL)__GET_VAR(data__->HIGHSENSOR,),
-    (BOOL)__GET_VAR(data__->LOWSENSOR,)));
+    (UINT)1,
+    (BOOL)__GET_VAR(data__->HIGHSENSOR,)));
   __SET_VAR(data__->,NOT9_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
   __SET_VAR(data__->TOF3.,IN,,__GET_VAR(data__->NOT9_OUT,));
   __SET_VAR(data__->TOF3.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
@@ -366,15 +378,52 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
     (UINT)2,
     (BOOL)__GET_VAR(data__->HIGH.Q1,),
     (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,)));
-  __SET_VAR(data__->,OR83_OUT,,OR__BOOL__BOOL(
+  __SET_VAR(data__->TOF6.,IN,,__GET_VAR(data__->AND82_OUT,));
+  __SET_VAR(data__->TOF6.,PT,,__time_to_timespec(1, 2000, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF6);
+  __SET_VAR(data__->,TRANSFLEFT,,__GET_VAR(data__->TOF6.Q,));
+  __SET_VAR(data__->,NOT45_OUT,,!(__GET_VAR(data__->HIGHSENSOR,)));
+  __SET_VAR(data__->,AND48_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
     (UINT)2,
-    (BOOL)__GET_VAR(data__->NOT13_OUT,),
-    (BOOL)__GET_VAR(data__->AND82_OUT,)));
-  __SET_VAR(data__->,TRANSFLEFT,,__GET_VAR(data__->OR83_OUT,));
-  __SET_VAR(data__->,CONVEYORLEFT,,1);
-  __SET_VAR(data__->,CONVEYORRIGHT,,1);
+    (BOOL)__GET_VAR(data__->NOT45_OUT,),
+    (BOOL)__GET_VAR(data__->LOWSENSOR,)));
+  __SET_VAR(data__->,NOT37_OUT,,!(__GET_VAR(data__->ATRIGHTENTRY,)));
+  __SET_VAR(data__->TOF4.,IN,,__GET_VAR(data__->NOT37_OUT,));
+  __SET_VAR(data__->TOF4.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF4);
+  __SET_VAR(data__->HIGH0.,S,,__GET_VAR(data__->AND48_OUT,));
+  __SET_VAR(data__->HIGH0.,R1,,__GET_VAR(data__->TOF4.Q,));
+  RS_body__(&data__->HIGH0);
+  __SET_VAR(data__->,AND54_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->HIGH0.Q1,),
+    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,)));
+  __SET_VAR(data__->TOF5.,IN,,__GET_VAR(data__->AND54_OUT,));
+  __SET_VAR(data__->TOF5.,PT,,__time_to_timespec(1, 2000, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF5);
+  __SET_VAR(data__->,TRANSFRIGHT,,__GET_VAR(data__->TOF5.Q,));
+  __SET_VAR(data__->,NOT31_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
+  __SET_VAR(data__->,NOT32_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
+  __SET_VAR(data__->TON0.,IN,,__GET_VAR(data__->NOT32_OUT,));
+  __SET_VAR(data__->TON0.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TON_body__(&data__->TON0);
+  __SET_VAR(data__->LEFTC.,S,,__GET_VAR(data__->NOT31_OUT,));
+  __SET_VAR(data__->LEFTC.,R1,,__GET_VAR(data__->TON0.Q,));
+  RS_body__(&data__->LEFTC);
+  __SET_VAR(data__->,CONVEYORLEFT,,__GET_VAR(data__->LEFTC.Q1,));
+  __SET_VAR(data__->,NOT34_OUT,,!(__GET_VAR(data__->ATRIGHTENTRY,)));
+  __SET_VAR(data__->,NOT35_OUT,,!(__GET_VAR(data__->ATRIGHTEXIT,)));
+  __SET_VAR(data__->TON1.,IN,,__GET_VAR(data__->NOT35_OUT,));
+  __SET_VAR(data__->TON1.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TON_body__(&data__->TON1);
+  __SET_VAR(data__->LEFTC0.,S,,__GET_VAR(data__->NOT34_OUT,));
+  __SET_VAR(data__->LEFTC0.,R1,,__GET_VAR(data__->TON1.Q,));
+  RS_body__(&data__->LEFTC0);
+  __SET_VAR(data__->,CONVEYORRIGHT,,__GET_VAR(data__->LEFTC0.Q1,));
   __SET_VAR(data__->,NOT14_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
   __SET_VAR(data__->TOF2.,IN,,__GET_VAR(data__->NOT14_OUT,));
   __SET_VAR(data__->TOF2.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
