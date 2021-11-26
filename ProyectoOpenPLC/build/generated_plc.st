@@ -1,7 +1,7 @@
 PROGRAM program0
   VAR
     AtEmptyPallet AT %IX100.0 : BOOL := FALSE;
-    AtLeftEntry AT %IX100.1 : BOOL := FALSE;
+    AtLeftEntry AT %IX100.1 : BOOL := TRUE;
     AtLeftExit AT %IX100.2 : BOOL := FALSE;
     AtPopulatedPallet AT %IX100.3 : BOOL := FALSE;
     AtRightEntry AT %IX100.4 : BOOL := TRUE;
@@ -39,14 +39,15 @@ PROGRAM program0
     TOF2 : TOF;
     TOF3 : TOF;
     RS0 : RS;
-    LEFTC : RS;
-    TON0 : TON;
-    LEFTC0 : RS;
-    TON1 : TON;
     TOF4 : TOF;
     High0 : RS;
     TOF5 : TOF;
     TOF6 : TOF;
+    RS1 : RS;
+    TON1 : TON;
+    RS2 : RS;
+    TON2 : TON;
+    TOF7 : TOF;
     NOT27_OUT : BOOL;
     AND75_OUT : BOOL;
     AND74_OUT : BOOL;
@@ -69,11 +70,16 @@ PROGRAM program0
     AND48_OUT : BOOL;
     NOT37_OUT : BOOL;
     AND54_OUT : BOOL;
-    NOT31_OUT : BOOL;
-    NOT32_OUT : BOOL;
-    NOT34_OUT : BOOL;
-    NOT35_OUT : BOOL;
+    AND91_OUT : BOOL;
+    NOT86_OUT : BOOL;
+    NOT93_OUT : BOOL;
+    AND35_OUT : BOOL;
     NOT14_OUT : BOOL;
+    AND83_OUT : BOOL;
+    NOT79_OUT : BOOL;
+    NOT85_OUT : BOOL;
+    AND58_OUT : BOOL;
+    NOT26_OUT : BOOL;
   END_VAR
 
   NOT27_OUT := NOT(FirstTransferLoaded);
@@ -119,19 +125,26 @@ PROGRAM program0
   AND54_OUT := AND(High0.Q1, ThirdTransferLoaded);
   TOF5(IN := AND54_OUT, PT := T#2000ms);
   TransfRight := TOF5.Q;
-  NOT31_OUT := NOT(AtLeftEntry);
-  NOT32_OUT := NOT(AtLeftExit);
-  TON0(IN := NOT32_OUT, PT := T#2500ms);
-  LEFTC(S := NOT31_OUT, R1 := TON0.Q);
-  ConveyorLeft := LEFTC.Q1;
-  NOT34_OUT := NOT(AtRightEntry);
-  NOT35_OUT := NOT(AtRightExit);
-  TON1(IN := NOT35_OUT, PT := T#2500ms);
-  LEFTC0(S := NOT34_OUT, R1 := TON1.Q);
-  ConveyorRight := LEFTC0.Q1;
+  AND91_OUT := AND(ThirdTransferLoaded, TransfLeft);
+  NOT86_OUT := NOT(AtLeftExit);
+  NOT93_OUT := NOT(ThirdTransferLoaded);
+  AND35_OUT := AND(NOT86_OUT, NOT93_OUT);
+  TON2(IN := AND35_OUT, PT := T#2000ms);
+  RS2(S := AND91_OUT, R1 := TON2.Q);
+  ConveyorLeft := RS2.Q1;
   NOT14_OUT := NOT(AtLeftExit);
   TOF2(IN := NOT14_OUT, PT := T#2500ms);
   RemoverLargePackage := TOF2.Q;
+  AND83_OUT := AND(ThirdTransferLoaded, TransfRight);
+  NOT79_OUT := NOT(AtRightExit);
+  NOT85_OUT := NOT(ThirdTransferLoaded);
+  AND58_OUT := AND(NOT79_OUT, NOT85_OUT);
+  TON1(IN := AND58_OUT, PT := T#2000ms);
+  RS1(S := AND83_OUT, R1 := TON1.Q);
+  ConveyorRight := RS1.Q1;
+  NOT26_OUT := NOT(AtRightExit);
+  TOF7(IN := NOT26_OUT, PT := T#2500ms);
+  RemoverSmallPackage := TOF7.Q;
 END_PROGRAM
 
 
