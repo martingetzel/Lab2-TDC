@@ -64,7 +64,6 @@ PROGRAM program0
     OR4_OUT : BOOL;
     NOT25_OUT : BOOL;
     AND22_OUT : BOOL;
-    NOT68_OUT : BOOL;
     AND8_OUT : BOOL;
     NOT9_OUT : BOOL;
     AND82_OUT : BOOL;
@@ -110,8 +109,7 @@ PROGRAM program0
   AND22_OUT := AND(NOT25_OUT, ThirdTransferLoaded);
   RS0(S := SecondTransferLoaded, R1 := AND22_OUT);
   SecondConveyor := RS0.Q1;
-  NOT68_OUT := NOT(ThirdTransferLoaded);
-  LoadThirdTransfer := NOT68_OUT;
+  LoadThirdTransfer := RS0.Q1;
   AND8_OUT := AND(HighSensor);
   NOT9_OUT := NOT(AtLeftEntry);
   TOF3(IN := NOT9_OUT, PT := T#1000ms);
@@ -131,7 +129,7 @@ PROGRAM program0
   TOF10(IN := AND113_OUT, PT := T#2500ms);
   NOT110_OUT := NOT(TOF10.Q);
   NOT104_OUT := NOT(AtLeftExit);
-  TON1(IN := NOT104_OUT, PT := T#1500ms);
+  TON1(IN := NOT104_OUT, PT := T#1000ms);
   AND107_OUT := AND(NOT110_OUT, TON1.Q);
   RS3(S := AND113_OUT, R1 := AND107_OUT);
   ConveyorLeft := RS3.Q1;
@@ -142,7 +140,7 @@ PROGRAM program0
   TOF8(IN := AND83_OUT, PT := T#2500ms);
   NOT81_OUT := NOT(TOF8.Q);
   NOT58_OUT := NOT(AtRightExit);
-  TON0(IN := NOT58_OUT, PT := T#1500ms);
+  TON0(IN := NOT58_OUT, PT := T#1000ms);
   AND79_OUT := AND(NOT81_OUT, TON0.Q);
   RS1(S := AND83_OUT, R1 := AND79_OUT);
   ConveyorRight := RS1.Q1;
