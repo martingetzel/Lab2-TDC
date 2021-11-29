@@ -249,10 +249,10 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   RS_init__(&data__->RS3,retain);
   TOF_init__(&data__->TOF10,retain);
   TON_init__(&data__->TON1,retain);
+  __INIT_VAR(data__->NOT2_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT27_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND75_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND74_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT2_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND46_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT57_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND55_OUT,__BOOL_LITERAL(FALSE),retain)
@@ -261,32 +261,35 @@ void PROGRAM0_init__(PROGRAM0 *data__, BOOL retain) {
   __INIT_VAR(data__->AND5_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT3_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->OR4_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT25_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND22_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT68_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND8_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT9_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND82_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT45_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND48_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->NOT37_OUT,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->AND54_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND113_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT110_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT104_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND107_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT9_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND82_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT14_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT25_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND22_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND83_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT81_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT58_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->AND79_OUT,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->NOT26_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT45_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND48_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->NOT37_OUT,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->AND54_OUT,__BOOL_LITERAL(FALSE),retain)
 }
 
 // Code part
 void PROGRAM0_body__(PROGRAM0 *data__) {
   // Initialise TEMP variables
 
+  __SET_VAR(data__->,NOT2_OUT,,!(__GET_VAR(data__->ATEMPTYPALLET,)));
+  __SET_VAR(data__->TOF0.,IN,,__GET_VAR(data__->NOT2_OUT,));
+  __SET_VAR(data__->TOF0.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF0);
+  __SET_VAR(data__->,REMOVEREMPTYPALLET,,__GET_VAR(data__->TOF0.Q,));
   __SET_VAR(data__->,NOT27_OUT,,!(__GET_VAR(data__->FIRSTTRANSFERLOADED,)));
   __SET_VAR(data__->,AND75_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
@@ -302,11 +305,6 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
     (BOOL)__GET_VAR(data__->AND75_OUT,)));
   __SET_VAR(data__->,FIRSTCONVEYOR,,__GET_VAR(data__->AND74_OUT,));
   __SET_VAR(data__->,LOADFIRSTTRANSFER,,__GET_VAR(data__->AND74_OUT,));
-  __SET_VAR(data__->,NOT2_OUT,,!(__GET_VAR(data__->ATEMPTYPALLET,)));
-  __SET_VAR(data__->TOF0.,IN,,__GET_VAR(data__->NOT2_OUT,));
-  __SET_VAR(data__->TOF0.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF0);
-  __SET_VAR(data__->,REMOVEREMPTYPALLET,,__GET_VAR(data__->TOF0.Q,));
   __SET_VAR(data__->,AND46_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
@@ -351,6 +349,52 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
     (BOOL)__GET_VAR(data__->AND5_OUT,),
     (BOOL)__GET_VAR(data__->NOT3_OUT,)));
   __SET_VAR(data__->,TRANSPOPULATEDPALLET,,__GET_VAR(data__->OR4_OUT,));
+  __SET_VAR(data__->,AND113_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,),
+    (BOOL)__GET_VAR(data__->ATLEFTENTRY,)));
+  __SET_VAR(data__->TOF10.,IN,,__GET_VAR(data__->AND113_OUT,));
+  __SET_VAR(data__->TOF10.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF10);
+  __SET_VAR(data__->,NOT110_OUT,,!(__GET_VAR(data__->TOF10.Q,)));
+  __SET_VAR(data__->,NOT104_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
+  __SET_VAR(data__->TON1.,IN,,__GET_VAR(data__->NOT104_OUT,));
+  __SET_VAR(data__->TON1.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
+  TON_body__(&data__->TON1);
+  __SET_VAR(data__->,AND107_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->NOT110_OUT,),
+    (BOOL)__GET_VAR(data__->TON1.Q,)));
+  __SET_VAR(data__->RS3.,S,,__GET_VAR(data__->AND113_OUT,));
+  __SET_VAR(data__->RS3.,R1,,__GET_VAR(data__->AND107_OUT,));
+  RS_body__(&data__->RS3);
+  __SET_VAR(data__->,CONVEYORLEFT,,__GET_VAR(data__->RS3.Q1,));
+  __SET_VAR(data__->,NOT9_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
+  __SET_VAR(data__->TOF3.,IN,,__GET_VAR(data__->NOT9_OUT,));
+  __SET_VAR(data__->TOF3.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF3);
+  __SET_VAR(data__->HIGH.,S,,__GET_VAR(data__->HIGHSENSOR,));
+  __SET_VAR(data__->HIGH.,R1,,__GET_VAR(data__->TOF3.Q,));
+  RS_body__(&data__->HIGH);
+  __SET_VAR(data__->,AND82_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->HIGH.Q1,),
+    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,)));
+  __SET_VAR(data__->TOF6.,IN,,__GET_VAR(data__->AND82_OUT,));
+  __SET_VAR(data__->TOF6.,PT,,__time_to_timespec(1, 2000, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF6);
+  __SET_VAR(data__->,TRANSFLEFT,,__GET_VAR(data__->TOF6.Q,));
+  __SET_VAR(data__->,NOT14_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
+  __SET_VAR(data__->TOF2.,IN,,__GET_VAR(data__->NOT14_OUT,));
+  __SET_VAR(data__->TOF2.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF2);
+  __SET_VAR(data__->,REMOVERLARGEPACKAGE,,__GET_VAR(data__->TOF2.Q,));
   __SET_VAR(data__->TOF1.,IN,,__GET_VAR(data__->SECONDTRANSFERLOADED,));
   __SET_VAR(data__->TOF1.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
   TOF_body__(&data__->TOF1);
@@ -366,30 +410,36 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
   __SET_VAR(data__->RS0.,R1,,__GET_VAR(data__->AND22_OUT,));
   RS_body__(&data__->RS0);
   __SET_VAR(data__->,SECONDCONVEYOR,,__GET_VAR(data__->RS0.Q1,));
-  __SET_VAR(data__->,NOT68_OUT,,!(__GET_VAR(data__->THIRDTRANSFERLOADED,)));
-  __SET_VAR(data__->,LOADTHIRDTRANSFER,,__GET_VAR(data__->NOT68_OUT,));
-  __SET_VAR(data__->,AND8_OUT,,AND__BOOL__BOOL(
-    (BOOL)__BOOL_LITERAL(TRUE),
-    NULL,
-    (UINT)1,
-    (BOOL)__GET_VAR(data__->HIGHSENSOR,)));
-  __SET_VAR(data__->,NOT9_OUT,,!(__GET_VAR(data__->ATLEFTENTRY,)));
-  __SET_VAR(data__->TOF3.,IN,,__GET_VAR(data__->NOT9_OUT,));
-  __SET_VAR(data__->TOF3.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF3);
-  __SET_VAR(data__->HIGH.,S,,__GET_VAR(data__->AND8_OUT,));
-  __SET_VAR(data__->HIGH.,R1,,__GET_VAR(data__->TOF3.Q,));
-  RS_body__(&data__->HIGH);
-  __SET_VAR(data__->,AND82_OUT,,AND__BOOL__BOOL(
+  __SET_VAR(data__->,LOADTHIRDTRANSFER,,__GET_VAR(data__->RS0.Q1,));
+  __SET_VAR(data__->,AND83_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
     NULL,
     (UINT)2,
-    (BOOL)__GET_VAR(data__->HIGH.Q1,),
-    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,)));
-  __SET_VAR(data__->TOF6.,IN,,__GET_VAR(data__->AND82_OUT,));
-  __SET_VAR(data__->TOF6.,PT,,__time_to_timespec(1, 2000, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF6);
-  __SET_VAR(data__->,TRANSFLEFT,,__GET_VAR(data__->TOF6.Q,));
+    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,),
+    (BOOL)__GET_VAR(data__->ATRIGHTENTRY,)));
+  __SET_VAR(data__->TOF8.,IN,,__GET_VAR(data__->AND83_OUT,));
+  __SET_VAR(data__->TOF8.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF8);
+  __SET_VAR(data__->,NOT81_OUT,,!(__GET_VAR(data__->TOF8.Q,)));
+  __SET_VAR(data__->,NOT58_OUT,,!(__GET_VAR(data__->ATRIGHTEXIT,)));
+  __SET_VAR(data__->TON0.,IN,,__GET_VAR(data__->NOT58_OUT,));
+  __SET_VAR(data__->TON0.,PT,,__time_to_timespec(1, 1000, 0, 0, 0, 0));
+  TON_body__(&data__->TON0);
+  __SET_VAR(data__->,AND79_OUT,,AND__BOOL__BOOL(
+    (BOOL)__BOOL_LITERAL(TRUE),
+    NULL,
+    (UINT)2,
+    (BOOL)__GET_VAR(data__->NOT81_OUT,),
+    (BOOL)__GET_VAR(data__->TON0.Q,)));
+  __SET_VAR(data__->RS1.,S,,__GET_VAR(data__->AND83_OUT,));
+  __SET_VAR(data__->RS1.,R1,,__GET_VAR(data__->AND79_OUT,));
+  RS_body__(&data__->RS1);
+  __SET_VAR(data__->,CONVEYORRIGHT,,__GET_VAR(data__->RS1.Q1,));
+  __SET_VAR(data__->,NOT26_OUT,,!(__GET_VAR(data__->ATRIGHTEXIT,)));
+  __SET_VAR(data__->TOF7.,IN,,__GET_VAR(data__->NOT26_OUT,));
+  __SET_VAR(data__->TOF7.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
+  TOF_body__(&data__->TOF7);
+  __SET_VAR(data__->,REMOVERSMALLPACKAGE,,__GET_VAR(data__->TOF7.Q,));
   __SET_VAR(data__->,NOT45_OUT,,!(__GET_VAR(data__->HIGHSENSOR,)));
   __SET_VAR(data__->,AND48_OUT,,AND__BOOL__BOOL(
     (BOOL)__BOOL_LITERAL(TRUE),
@@ -414,64 +464,6 @@ void PROGRAM0_body__(PROGRAM0 *data__) {
   __SET_VAR(data__->TOF5.,PT,,__time_to_timespec(1, 2000, 0, 0, 0, 0));
   TOF_body__(&data__->TOF5);
   __SET_VAR(data__->,TRANSFRIGHT,,__GET_VAR(data__->TOF5.Q,));
-  __SET_VAR(data__->,AND113_OUT,,AND__BOOL__BOOL(
-    (BOOL)__BOOL_LITERAL(TRUE),
-    NULL,
-    (UINT)2,
-    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,),
-    (BOOL)__GET_VAR(data__->ATLEFTENTRY,)));
-  __SET_VAR(data__->TOF10.,IN,,__GET_VAR(data__->AND113_OUT,));
-  __SET_VAR(data__->TOF10.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF10);
-  __SET_VAR(data__->,NOT110_OUT,,!(__GET_VAR(data__->TOF10.Q,)));
-  __SET_VAR(data__->,NOT104_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
-  __SET_VAR(data__->TON1.,IN,,__GET_VAR(data__->NOT104_OUT,));
-  __SET_VAR(data__->TON1.,PT,,__time_to_timespec(1, 1500, 0, 0, 0, 0));
-  TON_body__(&data__->TON1);
-  __SET_VAR(data__->,AND107_OUT,,AND__BOOL__BOOL(
-    (BOOL)__BOOL_LITERAL(TRUE),
-    NULL,
-    (UINT)2,
-    (BOOL)__GET_VAR(data__->NOT110_OUT,),
-    (BOOL)__GET_VAR(data__->TON1.Q,)));
-  __SET_VAR(data__->RS3.,S,,__GET_VAR(data__->AND113_OUT,));
-  __SET_VAR(data__->RS3.,R1,,__GET_VAR(data__->AND107_OUT,));
-  RS_body__(&data__->RS3);
-  __SET_VAR(data__->,CONVEYORLEFT,,__GET_VAR(data__->RS3.Q1,));
-  __SET_VAR(data__->,NOT14_OUT,,!(__GET_VAR(data__->ATLEFTEXIT,)));
-  __SET_VAR(data__->TOF2.,IN,,__GET_VAR(data__->NOT14_OUT,));
-  __SET_VAR(data__->TOF2.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF2);
-  __SET_VAR(data__->,REMOVERLARGEPACKAGE,,__GET_VAR(data__->TOF2.Q,));
-  __SET_VAR(data__->,AND83_OUT,,AND__BOOL__BOOL(
-    (BOOL)__BOOL_LITERAL(TRUE),
-    NULL,
-    (UINT)2,
-    (BOOL)__GET_VAR(data__->THIRDTRANSFERLOADED,),
-    (BOOL)__GET_VAR(data__->ATRIGHTENTRY,)));
-  __SET_VAR(data__->TOF8.,IN,,__GET_VAR(data__->AND83_OUT,));
-  __SET_VAR(data__->TOF8.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF8);
-  __SET_VAR(data__->,NOT81_OUT,,!(__GET_VAR(data__->TOF8.Q,)));
-  __SET_VAR(data__->,NOT58_OUT,,!(__GET_VAR(data__->ATRIGHTEXIT,)));
-  __SET_VAR(data__->TON0.,IN,,__GET_VAR(data__->NOT58_OUT,));
-  __SET_VAR(data__->TON0.,PT,,__time_to_timespec(1, 1500, 0, 0, 0, 0));
-  TON_body__(&data__->TON0);
-  __SET_VAR(data__->,AND79_OUT,,AND__BOOL__BOOL(
-    (BOOL)__BOOL_LITERAL(TRUE),
-    NULL,
-    (UINT)2,
-    (BOOL)__GET_VAR(data__->NOT81_OUT,),
-    (BOOL)__GET_VAR(data__->TON0.Q,)));
-  __SET_VAR(data__->RS1.,S,,__GET_VAR(data__->AND83_OUT,));
-  __SET_VAR(data__->RS1.,R1,,__GET_VAR(data__->AND79_OUT,));
-  RS_body__(&data__->RS1);
-  __SET_VAR(data__->,CONVEYORRIGHT,,__GET_VAR(data__->RS1.Q1,));
-  __SET_VAR(data__->,NOT26_OUT,,!(__GET_VAR(data__->ATRIGHTEXIT,)));
-  __SET_VAR(data__->TOF7.,IN,,__GET_VAR(data__->NOT26_OUT,));
-  __SET_VAR(data__->TOF7.,PT,,__time_to_timespec(1, 2500, 0, 0, 0, 0));
-  TOF_body__(&data__->TOF7);
-  __SET_VAR(data__->,REMOVERSMALLPACKAGE,,__GET_VAR(data__->TOF7.Q,));
 
   goto __end;
 
